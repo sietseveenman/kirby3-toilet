@@ -78,7 +78,7 @@
     null,
     null
   );
-  __component__.options.__file = "/Users/sietseveenman/projects/_boiler/update-kirby/kirby-3/site/plugins/kirby-3-dump-clips/src/components/areas/Toilet.vue";
+  __component__.options.__file = "/Users/sietseveenman/projects/_boiler/update-kirby/kirby-3/site/plugins/kirby3-toilet/src/components/areas/Toilet.vue";
   const Toilet = __component__.exports;
   panel.plugin("sietseveenman/kirby3-toilet", {
     components: {

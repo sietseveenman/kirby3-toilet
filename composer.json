@@ -1,0 +1,10 @@
+{
+    "name": "sietseveenman/kirby3-toilet",
+    "description": "The place for all your dumps",
+    "license": "MIT",
+    "type": "kirby-plugin",
+    "version": "0.0.1",
+    "require-dev": {
+        "symfony/var-dumper": "^6.1"
+    }
+}
