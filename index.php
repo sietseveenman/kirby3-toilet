@@ -13,11 +13,13 @@ function poop($var, $direct = false) {
     
     if ( $direct === true ) VarDumper::dump($var);
 
-    $dumpString = (new HtmlDumper())->dump((new VarCloner)->cloneVar($var), true);
-
     $dumpsFile = kirby()->root('site').'/toilet/dumps.txt';
 
-    F::write($dumpsFile, $dumpString, F::exists($dumpsFile));
+    $dumpString = (new HtmlDumper())->dump((new VarCloner)->cloneVar($var), true);
+
+    $seperator = F::exists($dumpsFile) ? '|U+1F4A9|' : '';
+
+    F::write($dumpsFile, $seperator . $dumpString, F::exists($dumpsFile));
  
     return $var;
 }
@@ -35,6 +37,10 @@ Kirby::plugin('sietseveenman/kirby3-toilet', [
                         'component' => 'toilet',
                         'title' => 'Toilet',
                         'props' => [
+                            'dumps' => function() {
+                                $file = kirby()->root('site').'/toilet/dumps.txt';
+                                return F::exists($file) ? explode('|U+1F4A9|', F::read($file)) : [];
+                            },
                             'headline' => function ($headline = "Number two's") {
                                 return $headline;
                             },
