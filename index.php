@@ -11,6 +11,27 @@ Kirby::plugin('sietseveenman/kirby3-dump-clips', [
         }
     ],
 
+    'areas' => [
+        'dump-clips' => [
+            'label'   => 'Dumps',
+            'icon'    => 'image',
+            'menu'    => true,
+            'views'   => [[
+                'pattern' => 'dumps',
+                'action'  => function () {
+                    return [
+                        'component' => 'dump-clips',
+                        'props' => [
+                            'headline' => function ($headline = 'Dump clips') {
+                                return $headline;
+                            },
+                        ]
+                    ];
+                }
+            ],],
+        ],
+    ],
+
 ]);
 
 
