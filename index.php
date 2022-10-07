@@ -2,7 +2,7 @@
 
 use Symfony\Component\VarDumper\VarDumper;
 
-Kirby::plugin('sietseveenman/kirby3-dump-clips', [
+Kirby::plugin('sietseveenman/kirby3-toilet', [
 
     'components' => [
         'dump' => function ($kirby, $variable, bool $echo = true) {
@@ -12,17 +12,18 @@ Kirby::plugin('sietseveenman/kirby3-dump-clips', [
     ],
 
     'areas' => [
-        'dump-clips' => [
-            'label'   => 'Dumps',
-            'icon'    => 'image',
+        'toilet' => [
+            'label'   => 'Toilet',
+            'icon'    => 'smile',
             'menu'    => true,
             'views'   => [[
-                'pattern' => 'dumps',
+                'pattern' => 'toilet',
                 'action'  => function () {
                     return [
-                        'component' => 'dump-clips',
+                        'component' => 'toilet',
+                        'title' => 'Toilet',
                         'props' => [
-                            'headline' => function ($headline = 'Dump clips') {
+                            'headline' => function ($headline = "Number two's") {
                                 return $headline;
                             },
                         ]

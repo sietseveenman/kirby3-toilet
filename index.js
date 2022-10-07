@@ -59,11 +59,12 @@
       headline: String
     },
     mounted() {
+      console.log("eyoo");
     }
   };
   var _sfc_render = function render() {
     var _vm = this, _c = _vm._self._c;
-    return _c("k-inside", [_c("k-view", [_c("h1", [_vm._v("EYOOOO")])])], 1);
+    return _c("k-inside", [_c("k-view", [_c("h1", [_vm._v("Don't forget to flush")])])], 1);
   };
   var _sfc_staticRenderFns = [];
   _sfc_render._withStripped = true;
@@ -77,11 +78,11 @@
     null,
     null
   );
-  __component__.options.__file = "/Users/sietseveenman/projects/_boiler/update-kirby/kirby-3/site/plugins/kirby-3-dump-clips/src/components/areas/DumpClips.vue";
-  const DumpClips = __component__.exports;
-  window.panel.plugin("sietseveenman/kirby3-dump-clips", {
+  __component__.options.__file = "/Users/sietseveenman/projects/_boiler/update-kirby/kirby-3/site/plugins/kirby-3-dump-clips/src/components/areas/Toilet.vue";
+  const Toilet = __component__.exports;
+  panel.plugin("sietseveenman/kirby3-toilet", {
     components: {
-      "dump-clips": DumpClips
+      toilet: Toilet
     }
   });
 })();

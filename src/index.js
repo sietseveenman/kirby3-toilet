@@ -1,7 +1,7 @@
-import DumpClips from "./components/areas/DumpClips.vue";
+import Toilet from "./components/areas/Toilet.vue";
 
-window.panel.plugin("sietseveenman/kirby3-dump-clips", {
+panel.plugin("sietseveenman/kirby3-toilet", {
   components: {
-    'dump-clips' : DumpClips
+    toilet: Toilet
   }
 });
