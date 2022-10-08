@@ -24,7 +24,7 @@ function poop(
     $dt = new DateTime("now", new DateTimeZone('Europe/Amsterdam'));
     $dt->setTimestamp($timestamp);
 
-    $dumpFile = kirby()->root('site').'/toilet/dump-'.$timestamp.'.txt';
+    $dumpFile = kirby()->root('site').'/toilet/dump-('.$timestamp.').txt';
     
     $dumper = new HtmlDumper();
     $dumper->setTheme('light');
@@ -77,6 +77,9 @@ Kirby::plugin('sietseveenman/kirby3-toilet', [
                             'headline' => function ($headline = "Number two's") {
                                 return $headline;
                             },
+                            'timeout' => function ($miliSeconds = 2000) {
+                                return $miliSeconds;
+                            },
                         ]
                     ];
                 }
@@ -98,7 +101,7 @@ Kirby::plugin('sietseveenman/kirby3-toilet', [
                     }
 
                     try {
-                        F::remove(  kirby()->root('site').'/toilet/dump-'.$timestamp.'.txt' );
+                        F::remove(  kirby()->root('site').'/toilet/dump-('.$timestamp.').txt' );
                     } 
                     catch (\Throwable $th) {
                         return Response::json([
@@ -110,6 +113,40 @@ Kirby::plugin('sietseveenman/kirby3-toilet', [
                     return Response::json([
                         'success'=> true,
                         'message'=> 'Dump with timestamp: ' .$timestamp. ' has been removed'
+                    ], 200);
+                }
+            ],
+            [
+                'pattern' => 'receive-dumps',
+                'method' => 'GET',
+                'action'  => function () {
+
+                    $latest_dump_timestamp = get('timestamp');
+
+                    $toilet = kirby()->root('site').'/toilet';
+                    $dumpFiles = Dir::files($toilet);
+               
+                    if ( $latest_dump_timestamp ) {
+                        $dumps = array_filter($dumpFiles, function($d) use ($latest_dump_timestamp) {
+                            preg_match('#\((.*?)\)#', $d, $match);
+                            $timestamp = $match[1];
+                            // dump($timestamp);
+                            return $timestamp > $latest_dump_timestamp;
+                        });
+                    }
+                    // return 
+                    // dump('latest');
+                    // dump($latest_dump_timestamp);
+                    // dd($dumps);
+                    // // $dumps = array_map(fn($file) => file_get_contents($toilet.'/'.$file), $dumpFiles);
+                    // // return $dumps;
+
+                    return Response::json([
+                        'success'=> true,
+                        'newDumps' => $dumps,
+                        'message'=> count($dumps) > 0 
+                            ? 'New dumps received' 
+                            : 'No new dumps'
                     ], 200);
                 }
             ],

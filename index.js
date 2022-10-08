@@ -485,7 +485,8 @@
   const _sfc_main = {
     props: {
       headline: String,
-      dumps: Array
+      dumps: Array,
+      timeout: Number
     },
     computed: {
       dumpObjects() {
@@ -495,11 +496,7 @@
     data() {
       return {
         dump: null,
-        entries: [],
         ready: false,
-        newEntriesTimeout: null,
-        newEntriesTimer: 2e3,
-        recordingStatus: "enabled",
         sfDump: null,
         triggered: []
       };
@@ -507,12 +504,16 @@
     mounted() {
       console.log(this.dumpObjects);
       this.sfDump = sfdump(document);
+      this.addStyles();
       this.triggerDumps();
-      let style = document.createElement("style");
-      style.innerText = "pre.sf-dump .sf-dump-compact, .sf-dump-str-collapse .sf-dump-str-collapse, .sf-dump-str-expand .sf-dump-str-expand { display: none; }";
-      document.head.append(style);
+      this.receiveDumps();
     },
     methods: {
+      addStyles() {
+        let style = document.createElement("style");
+        style.innerText = "pre.sf-dump .sf-dump-compact, .sf-dump-str-collapse .sf-dump-str-collapse, .sf-dump-str-expand .sf-dump-str-expand { display: none; }";
+        document.head.append(style);
+      },
       removeDump(timestamp) {
         this.$api.post("remove-dump/" + timestamp).then((res) => {
           if (res.success) {
@@ -524,6 +525,17 @@
         }).catch((error) => {
           console.error(error);
         });
+      },
+      receiveDumps() {
+        setTimeout(() => {
+          let timestamp = this.dumpObjects.length ? this.dumpObjects[this.dumpObjects.length - 1].timestamp : null;
+          this.$api.get("receive-dumps", { timestamp }).then((res) => {
+            console.log(res);
+            this.receiveDumps();
+          }).catch((error) => {
+            console.error(error);
+          });
+        }, this.timeout);
       },
       triggerDumps() {
         const divs = this.$refs.dumps;

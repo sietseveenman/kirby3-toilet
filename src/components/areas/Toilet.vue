@@ -100,6 +100,7 @@ export default {
     props: {
         headline: String,
         dumps: Array,
+        timeout: Number
     },
     computed: {
         dumpObjects() {
@@ -109,11 +110,7 @@ export default {
     data() {
         return {
             dump: null,
-            entries: [],
             ready: false,
-            newEntriesTimeout: null,
-            newEntriesTimer: 2000,
-            recordingStatus: 'enabled',
             sfDump: null,
             triggered: [],
         };
@@ -121,14 +118,18 @@ export default {
     mounted() {
         console.log(this.dumpObjects);
 
-        this.sfDump = sfdump(document);
-        this.triggerDumps();
-        let style = document.createElement('style')
-        style.innerText = 'pre.sf-dump .sf-dump-compact, .sf-dump-str-collapse .sf-dump-str-collapse, .sf-dump-str-expand .sf-dump-str-expand { display: none; }'
-        document.head.append(style)
+        this.sfDump = sfdump(document)
+        this.addStyles()
+    
+        this.triggerDumps()
+        this.receiveDumps()
     },
     methods: {
-
+        addStyles() {
+            let style = document.createElement('style')
+            style.innerText = 'pre.sf-dump .sf-dump-compact, .sf-dump-str-collapse .sf-dump-str-collapse, .sf-dump-str-expand .sf-dump-str-expand { display: none; }'
+            document.head.append(style)
+        },
         removeDump(timestamp) {
             this.$api
             .post('remove-dump/'+timestamp)
@@ -142,6 +143,23 @@ export default {
                }
             })
             .catch(error => {console.error(error)})
+        },
+        
+        receiveDumps() {
+            setTimeout(() => {
+
+                let timestamp = this.dumpObjects.length ? 
+                    this.dumpObjects[this.dumpObjects.length-1].timestamp
+                    : null
+
+                this.$api
+                .get('receive-dumps',{timestamp})
+                .then(res => {
+                   console.log(res)
+                   this.receiveDumps()
+                })
+                .catch(error => { console.error(error) })
+            }, this.timeout)
         },
  
         triggerDumps() {
@@ -158,7 +176,8 @@ export default {
                 this.sfDump(id);
                 this.triggered.push(id);
             });
-        }
+        },
+
     }
 }
 </script>
