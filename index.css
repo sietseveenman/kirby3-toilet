@@ -2,10 +2,12 @@
   --borderColor: rgba(0,0,0,0.12);
 }
 .k-toilet-view {
-  padding: 40px;
+  padding: 50px 60px;
 }
 .container {
-  margin: 20px auto;
+  margin: 20px 0;
+  width: 100%;
+  max-width: 820px;
 }
 .dump {
   display: flex;
@@ -17,7 +19,8 @@
 }
 .meta {
   width: 15%;
-  max-width: 190px;
+  max-width: 160px;
+  min-width: 160px;
   padding: 13px 14px 10px;
   border-right: 1px dashed var(--borderColor);
   background-color: rgba(0, 0, 0, 0.01);

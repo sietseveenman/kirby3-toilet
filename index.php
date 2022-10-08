@@ -5,6 +5,7 @@
 use Kirby\Data\Data;
 use Kirby\Filesystem\F;
 use kirby\Data\Json;
+use Kirby\Cms\Response;
 use Symfony\Component\VarDumper\VarDumper;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper;
@@ -19,19 +20,20 @@ function poop(
     
     if ( $direct === true ) VarDumper::dump($var);
 
-    $dumpsFile = kirby()->root('site').'/toilet/dumps.txt';
+    $timestamp = time();
+    $dt = new DateTime("now", new DateTimeZone('Europe/Amsterdam'));
+    $dt->setTimestamp($timestamp);
 
+    $dumpFile = kirby()->root('site').'/toilet/dump-'.$timestamp.'.txt';
+    
     $dumper = new HtmlDumper();
     $dumper->setTheme('light');
-    $dumpString = $dumper->dump((new VarCloner)->cloneVar($var), true);
+    $fecal_matter = $dumper->dump((new VarCloner)->cloneVar($var), true);
     
-    $timestamp = time();
-    $dt = new DateTime("now", new DateTimeZone('Europe/Amsterdam')); //first argument "must" be a string
-    $dt->setTimestamp($timestamp); //adjust the object to correct timestamp
-
     $dump = [
-        'dump' => $dumpString,
-        'timestamp' => $dt->format('H:i:s'),
+        'fecal_matter' => $fecal_matter,
+        'timestamp' => $timestamp,
+        'time' => $dt->format('H:i:s'),
         'label' => $label,
         'trace' => null
     ];
@@ -42,11 +44,13 @@ function poop(
         $dump['trace'] = $caller;
     }
 
-    // VarDumper::dump($dump);
+    // $dumpFileExists = F::exists($dumpFile);
+    // $seperator = $dumpFileExists
+    //     ? '|U+1F4A9|' 
+    //     : '';
+    // F::write($dumpFile, $seperator.Json::encode($dump), $dumpFileExists);
 
-    $seperator = F::exists($dumpsFile) ? '|U+1F4A9|' : '';
-
-    F::write($dumpsFile, $seperator . Json::encode($dump), F::exists($dumpsFile));
+    F::write($dumpFile, Json::encode($dump));
  
     return $var;
 }
@@ -65,8 +69,10 @@ Kirby::plugin('sietseveenman/kirby3-toilet', [
                         'title' => 'Toilet',
                         'props' => [
                             'dumps' => function() {
-                                $file = kirby()->root('site').'/toilet/dumps.txt';
-                                return array_reverse( F::exists($file) ? explode('|U+1F4A9|', F::read($file)) : []);
+                                $toilet = kirby()->root('site').'/toilet';
+                                $dumpFiles = Dir::files($toilet);
+                                $dumps = array_map(fn($file) => file_get_contents($toilet.'/'.$file), $dumpFiles);
+                                return $dumps;
                             },
                             'headline' => function ($headline = "Number two's") {
                                 return $headline;
@@ -77,7 +83,38 @@ Kirby::plugin('sietseveenman/kirby3-toilet', [
             ],],
         ],
     ],
+    'api' => [
+        'routes' => [
+            [
+                'pattern' => 'remove-dump/(:num)',
+                'method' => 'POST',
+                'action'  => function (string $timestamp = null) {
 
+                    if ( !$timestamp ) {
+                        return Response::json([
+                            'success'=> false, 
+                            'message' => 'No timestamp provided'
+                        ], 400);
+                    }
+
+                    try {
+                        F::remove(  kirby()->root('site').'/toilet/dump-'.$timestamp.'.txt' );
+                    } 
+                    catch (\Throwable $th) {
+                        return Response::json([
+                            'success'=> false,
+                            'message'=> $th->getMessage()
+                        ], 500);
+                    }
+                    
+                    return Response::json([
+                        'success'=> true,
+                        'message'=> 'Dump with timestamp: ' .$timestamp. ' has been removed'
+                    ], 200);
+                }
+            ],
+        ]
+    ]
 ]);
 
 

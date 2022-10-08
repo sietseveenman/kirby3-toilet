@@ -3,10 +3,12 @@
         --borderColor: rgba(0,0,0,0.12);
     }
     .k-toilet-view {
-        padding: 40px;
+        padding: 50px 60px;
     }
     .container {
-        margin: 20px auto;
+        margin: 20px 0;
+        width: 100%;
+        max-width: 820px;
     }
     .dump {
         display: flex;
@@ -18,13 +20,13 @@
     }
     .meta {
         width: 15%;
-        max-width: 190px;
+        max-width: 160px;
+        min-width: 160px;
         padding: 13px 14px 10px;
         border-right: 1px dashed var(--borderColor);
         background-color: rgba(black,0.01);
         
         display: flex;
-        // flex-direction: column;
         justify-content: space-between;
         align-items: baseline;
 
@@ -69,18 +71,18 @@
             <k-headline size="large">Don't forget to flush</k-headline>
             
             <div class="container">
-                <div v-for="(entry, index) in dumpObjects" :key="index" class="dump">
+                <div v-for="(dump, index) in dumpObjects" :key="index" class="dump">
                     <div class="meta">
                         <k-text size="tiny" class="timestamp">
-                            <k-icon type="clock" class="icon"/><span>{{ entry.timestamp }}</span>
+                            <k-icon type="clock" class="icon"/><span>{{ dump.time }}</span>
                         </k-text>
-                        <button class="remove" @click="remove(index)">
+                        <button class="remove" @click="removeDump(dump.timestamp)">
                             <k-icon type="remove"/>
                         </button>
                     </div>
                     <div class="print">
-                        <k-headline v-if="entry.label" class="label">{{ entry.label }}</k-headline>
-                        <div v-html="entry.dump" :data-index="index" ref="dumps">
+                        <k-headline v-if="dump.label" class="label">{{ dump.label }}</k-headline>
+                        <div v-html="dump.fecal_matter" :data-index="index" ref="dumps">
                         </div>
                     </div>
                 </div>
@@ -117,7 +119,6 @@ export default {
         };
     },
     mounted() {
-        // this.dumps = this.dumps.reverse()
         console.log(this.dumpObjects);
 
         this.sfDump = sfdump(document);
@@ -128,8 +129,19 @@ export default {
     },
     methods: {
 
-        remove(i) {
-            this.dumps.splice(i, 1)
+        removeDump(timestamp) {
+            this.$api
+            .post('remove-dump/'+timestamp)
+            .then(res => {
+               if ( res.success ) {
+                    const dumpIndex = this.dumps.map(d=>JSON.parse(d).timestamp).indexOf(timestamp)
+                    this.dumps.splice(dumpIndex, 1)
+               }
+               else {
+                console.error('Something went wrong removing: ',JSON.parse(this.dumps.dumpIndex))
+               }
+            })
+            .catch(error => {console.error(error)})
         },
  
         triggerDumps() {
