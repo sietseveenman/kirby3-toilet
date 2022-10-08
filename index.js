@@ -541,7 +541,7 @@
   };
   var _sfc_render = function render() {
     var _vm = this, _c = _vm._self._c;
-    return _c("k-inside", [_c("k-view", { staticClass: "k-toilet-view" }, [_c("k-headline", { attrs: { "size": "large" } }, [_vm._v("Don't forget to flush")]), _c("div", { staticClass: "container" }, _vm._l(_vm.dumpObjects, function(dump, index) {
+    return _c("k-inside", [_c("k-view", { staticClass: "k-toilet-view" }, [_c("k-headline", { attrs: { "size": "large" } }, [_vm._v("Don't forget to wash your hands")]), _c("div", { staticClass: "container" }, _vm._l(_vm.dumpObjects, function(dump, index) {
       return _c("div", { key: index, staticClass: "dump" }, [_c("div", { staticClass: "meta" }, [_c("k-text", { staticClass: "timestamp", attrs: { "size": "tiny" } }, [_c("k-icon", { staticClass: "icon", attrs: { "type": "clock" } }), _c("span", [_vm._v(_vm._s(dump.time))])], 1), _c("button", { staticClass: "remove", on: { "click": function($event) {
         return _vm.removeDump(dump.timestamp);
       } } }, [_c("k-icon", { attrs: { "type": "remove" } })], 1)], 1), _c("div", { staticClass: "print" }, [dump.label ? _c("k-headline", { staticClass: "label" }, [_vm._v(_vm._s(dump.label))]) : _vm._e(), _c("div", { ref: "dumps", refInFor: true, attrs: { "data-index": index }, domProps: { "innerHTML": _vm._s(dump.fecal_matter) } })], 1)]);

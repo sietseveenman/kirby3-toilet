@@ -68,7 +68,7 @@
     <k-inside>
         <k-view class="k-toilet-view">
             
-            <k-headline size="large">Don't forget to flush</k-headline>
+            <k-headline size="large">Don't forget to wash your hands</k-headline>
             
             <div class="container">
                 <div v-for="(dump, index) in dumpObjects" :key="index" class="dump">
