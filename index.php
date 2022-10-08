@@ -24,7 +24,7 @@ function poop(
     $dt = new DateTime("now", new DateTimeZone('Europe/Amsterdam'));
     $dt->setTimestamp($timestamp);
 
-    $dumpFile = kirby()->root('site').'/toilet/dump-('.$timestamp.').txt';
+    $dumpFile = kirby()->root('site').'/toilet/fresh-dump-x'.$timestamp.'x.txt';
     
     $dumper = new HtmlDumper();
     $dumper->setTheme('light');
@@ -68,12 +68,6 @@ Kirby::plugin('sietseveenman/kirby3-toilet', [
                         'component' => 'toilet',
                         'title' => 'Toilet',
                         'props' => [
-                            'dumps' => function() {
-                                $toilet = kirby()->root('site').'/toilet';
-                                $dumpFiles = Dir::files($toilet);
-                                $dumps = array_map(fn($file) => file_get_contents($toilet.'/'.$file), $dumpFiles);
-                                return $dumps;
-                            },
                             'headline' => function ($headline = "Number two's") {
                                 return $headline;
                             },
@@ -101,7 +95,7 @@ Kirby::plugin('sietseveenman/kirby3-toilet', [
                     }
 
                     try {
-                        F::remove(  kirby()->root('site').'/toilet/dump-('.$timestamp.').txt' );
+                        F::remove(  kirby()->root('site').'/toilet/dump-x'.$timestamp.'x.txt' );
                     } 
                     catch (\Throwable $th) {
                         return Response::json([
@@ -117,36 +111,38 @@ Kirby::plugin('sietseveenman/kirby3-toilet', [
                 }
             ],
             [
-                'pattern' => 'receive-dumps',
+                'pattern' => 'receive-fresh-dumps',
                 'method' => 'GET',
                 'action'  => function () {
 
-                    $latest_dump_timestamp = get('timestamp');
-
+                    $is_initial_dump = get('initial');
+                   
                     $toilet = kirby()->root('site').'/toilet';
                     $dumpFiles = Dir::files($toilet);
-               
-                    if ( $latest_dump_timestamp ) {
-                        $dumps = array_filter($dumpFiles, function($d) use ($latest_dump_timestamp) {
-                            preg_match('#\((.*?)\)#', $d, $match);
-                            $timestamp = $match[1];
-                            // dump($timestamp);
-                            return $timestamp > $latest_dump_timestamp;
-                        });
+                    $dumps = [];
+            
+                    if( !$is_initial_dump ) {
+
+                        // Get fresh dumps
+                        $fresh_dumps = array_filter( $dumpFiles, fn($d) => str_contains($d, 'fresh') );
+    
+                        foreach ($fresh_dumps as $dumpFile) {
+                            array_push($dumps, file_get_contents($toilet.'/'.$dumpFile));
+                            
+                            $name = F::name($toilet.'/'.$dumpFile);
+                            F::rename($toilet.'/'.$dumpFile, str_replace('fresh-', '', $name), true);
+                        }
+                    } 
+                    else {
+                        $dumps =  array_map( fn($file) => file_get_contents($toilet.'/'.$file), $dumpFiles );
                     }
-                    // return 
-                    // dump('latest');
-                    // dump($latest_dump_timestamp);
-                    // dd($dumps);
-                    // // $dumps = array_map(fn($file) => file_get_contents($toilet.'/'.$file), $dumpFiles);
-                    // // return $dumps;
 
                     return Response::json([
                         'success'=> true,
-                        'newDumps' => $dumps,
+                        'dumps' => $dumps,
                         'message'=> count($dumps) > 0 
-                            ? 'New dumps received' 
-                            : 'No new dumps'
+                            ? count($dumps).' new dumps received' 
+                            : 'No new dumps',
                     ], 200);
                 }
             ],
