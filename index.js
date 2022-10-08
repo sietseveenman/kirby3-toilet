@@ -487,6 +487,11 @@
       headline: String,
       dumps: Array
     },
+    computed: {
+      dumpObjects() {
+        return this.dumps.map((d) => JSON.parse(d));
+      }
+    },
     data() {
       return {
         dump: null,
@@ -500,6 +505,7 @@
       };
     },
     mounted() {
+      console.log(this.dumpObjects);
       this.sfDump = sfdump(document);
       this.triggerDumps();
       let style = document.createElement("style");
@@ -507,6 +513,9 @@
       document.head.append(style);
     },
     methods: {
+      remove(i) {
+        this.dumps.splice(i, 1);
+      },
       triggerDumps() {
         const divs = this.$refs.dumps;
         if (!divs)
@@ -523,9 +532,11 @@
   };
   var _sfc_render = function render() {
     var _vm = this, _c = _vm._self._c;
-    return _c("k-inside", [_c("k-view", { staticClass: "k-toilet-view" }, [_c("k-headline", { attrs: { "size": "large" } }, [_vm._v("Don't forget to flush")]), _vm._l(_vm.dumps, function(dump, index) {
-      return _c("div", { key: index, staticClass: "dump" }, [_c("div", { ref: "dumps", refInFor: true, attrs: { "data-index": index }, domProps: { "innerHTML": _vm._s(dump) } })]);
-    })], 2)], 1);
+    return _c("k-inside", [_c("k-view", { staticClass: "k-toilet-view" }, [_c("k-headline", { attrs: { "size": "large" } }, [_vm._v("Don't forget to flush")]), _c("div", { staticClass: "container" }, _vm._l(_vm.dumpObjects, function(entry, index) {
+      return _c("div", { key: index, staticClass: "dump" }, [_c("div", { staticClass: "meta" }, [_c("k-text", { staticClass: "timestamp", attrs: { "size": "tiny" } }, [_c("k-icon", { staticClass: "icon", attrs: { "type": "clock" } }), _c("span", [_vm._v(_vm._s(entry.timestamp))])], 1), _c("button", { staticClass: "remove", on: { "click": function($event) {
+        return _vm.remove(index);
+      } } }, [_c("k-icon", { attrs: { "type": "remove" } })], 1)], 1), _c("div", { staticClass: "print" }, [entry.label ? _c("k-headline", { staticClass: "label" }, [_vm._v(_vm._s(entry.label))]) : _vm._e(), _c("div", { ref: "dumps", refInFor: true, attrs: { "data-index": index }, domProps: { "innerHTML": _vm._s(entry.dump) } })], 1)]);
+    }), 0)], 1)], 1);
   };
   var _sfc_staticRenderFns = [];
   _sfc_render._withStripped = true;

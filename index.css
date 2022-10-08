@@ -1,10 +1,58 @@
-
+:root {
+  --borderColor: rgba(0,0,0,0.12);
+}
 .k-toilet-view {
-    padding: 50px;
+  padding: 40px;
+}
+.container {
+  margin: 20px auto;
 }
 .dump {
-    margin: 25px auto;
+  display: flex;
+  border: 1px solid var(--borderColor);
+  border-radius: 6px;
 }
-.dump .sf-dump {
-    padding: 15px 18px;
+.dump:not(:last-child) {
+  border-bottom: 0px;
+}
+.meta {
+  width: 15%;
+  max-width: 190px;
+  padding: 13px 14px 10px;
+  border-right: 1px dashed var(--borderColor);
+  background-color: rgba(0, 0, 0, 0.01);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.meta .remove {
+  margin-left: auto;
+  transform: scale(0.9);
+  opacity: 0.3;
+  transition: 0.2s ease-in-out;
+}
+.meta .remove:hover {
+  opacity: 1;
+}
+.label, .timestamp {
+  color: rgba(0, 0, 0, 0.7);
+  font-size: 14px;
+  padding-bottom: 0.2em;
+}
+.timestamp {
+  display: flex;
+  column-gap: 0.5em;
+}
+.timestamp .icon {
+  transform: scale(0.8);
+}
+.print {
+  padding: 12px 14px 10px;
+  flex-grow: 1;
+}
+pre.sf-dump {
+  width: 100%;
+  font-size: 13px !important;
+  line-height: 1.25 !important;
+  background-color: transparent !important;
 }
