@@ -24,7 +24,9 @@ function poop(
     $dt = new DateTime("now", new DateTimeZone('Europe/Amsterdam'));
     $dt->setTimestamp($timestamp);
 
-    $dumpFile = kirby()->root('site').'/toilet/fresh-dump-x'.$timestamp.'x.txt';
+    $toilet = kirby()->root('site').'/toilet';
+
+    $dumpFile = $toilet .'/fresh-dump-x'.$timestamp.'x.txt';
     
     $dumper = new HtmlDumper();
     $dumper->setTheme('light');
@@ -44,11 +46,8 @@ function poop(
         $dump['trace'] = $caller;
     }
 
-    // $dumpFileExists = F::exists($dumpFile);
-    // $seperator = $dumpFileExists
-    //     ? '|U+1F4A9|' 
-    //     : '';
-    // F::write($dumpFile, $seperator.Json::encode($dump), $dumpFileExists);
+    // TODO: If there are more than XXX files, remove the oldest file
+    // $dumpFiles = Dir::files($toilet);
 
     F::write($dumpFile, Json::encode($dump));
  
