@@ -489,7 +489,7 @@
     },
     computed: {
       parsedDumps() {
-        return this.dumps.map((d) => JSON.parse(d));
+        return this.dumps.map((d) => JSON.parse(d)).reverse();
       }
     },
     data() {
