@@ -186,6 +186,7 @@ export default {
         
         receiveDumps() {
             this.dumpTimeout = setTimeout(() => {
+                console.log('check')
                 this.$api.get('receive-fresh-dumps', this.firstDump ? { initial:true } : {})
                 .then(res => {
                     res.dumps?.forEach( dump => this.dumps.push(dump) )

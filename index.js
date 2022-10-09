@@ -538,6 +538,7 @@
       },
       receiveDumps() {
         this.dumpTimeout = setTimeout(() => {
+          console.log("check");
           this.$api.get("receive-fresh-dumps", this.firstDump ? { initial: true } : {}).then((res) => {
             var _a;
             (_a = res.dumps) == null ? void 0 : _a.forEach((dump) => this.dumps.push(dump));

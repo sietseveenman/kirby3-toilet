@@ -55,6 +55,9 @@ function poop(
 }
 
 Kirby::plugin('sietseveenman/kirby3-toilet', [
+    'options' => [
+        'poop-timeout' => 2000
+    ],
     'areas' => [
         'toilet' => [
             'label'   => 'Toilet',
@@ -70,8 +73,8 @@ Kirby::plugin('sietseveenman/kirby3-toilet', [
                             'headline' => function ($headline = "Number two's") {
                                 return $headline;
                             },
-                            'timeout' => function ($miliSeconds = 2000) {
-                                return $miliSeconds;
+                            'timeout' => function () {
+                                return option('sietseveenman.kirby3-toilet.poop-timeout');
                             },
                         ]
                     ];
