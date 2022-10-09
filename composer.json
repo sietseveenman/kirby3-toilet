@@ -3,7 +3,7 @@
     "description": "The place for all your dumps",
     "license": "MIT",
     "type": "kirby-plugin",
-    "version": "1.0",
+    "version": "1.0.1",
     "authors": [
         {
             "name": "Sietse Veenman",
