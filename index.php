@@ -82,9 +82,38 @@ Kirby::plugin('sietseveenman/kirby3-toilet', [
     'api' => [
         'routes' => [
             [
+                'pattern' => 'flush',
+                'method' => 'POST',
+                'action'  => function () {
+
+                    $toilet = kirby()->root('site').'/toilet';
+                    $dumpFiles = Dir::files($toilet);
+
+                    try {
+                        foreach ($dumpFiles as $file) {
+                            F::remove($toilet.'/'.$file );
+                        }
+                    }
+                    
+                    catch (\Throwable $th) {
+                        return Response::json([
+                            'success'=> false,
+                            'message'=> $th->getMessage()
+                        ], 500);
+                    }
+
+                    return Response::json([
+                        'success'=> true,
+                        'message'=> 'Flushed'
+                    ], 200);
+                }
+            ],
+            [
                 'pattern' => 'remove-dump/(:num)',
                 'method' => 'POST',
                 'action'  => function (string $timestamp = null) {
+
+                    $toilet = kirby()->root('site').'/toilet';
 
                     if ( !$timestamp ) {
                         return Response::json([
@@ -94,7 +123,7 @@ Kirby::plugin('sietseveenman/kirby3-toilet', [
                     }
 
                     try {
-                        F::remove(  kirby()->root('site').'/toilet/dump-x'.$timestamp.'x.txt' );
+                        F::remove( $toilet.'/dump-x'.$timestamp.'x.txt' );
                     } 
                     catch (\Throwable $th) {
                         return Response::json([

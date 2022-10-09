@@ -10,6 +10,27 @@
         width: 100%;
         max-width: 820px;
     }
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+    }
+    .flush {
+        display: flex;
+        column-gap: 5px;
+        font-weight: 600;
+        opacity: 0.5;
+        transition: 0.2s ease-in-out;
+        &:hover {
+            opacity: 1;
+            .icon {
+                transform: rotate(2turn);
+            }
+        }
+        .icon {
+            transition: 0.8s ease-in-out;
+        }
+    }
     .dump {
         display: flex;
         border: 1px solid var(--borderColor);
@@ -68,7 +89,12 @@
     <k-inside>
         <k-view class="k-toilet-view">
             
-            <k-headline size="large">Don't forget to wash your hands</k-headline>
+            <div class="header">
+                <k-headline size="large">Don't forget to wash your hands</k-headline>
+                <button class="flush" @click="flush" v-show="parsedDumps.length > 1">
+                    <k-icon type="refresh" class="icon"/> Flush toilet
+                </button>
+            </div>
             
             <div class="container">
                 <div v-for="(dump, index) in parsedDumps" :key="index" class="dump">
@@ -127,6 +153,16 @@ export default {
             let style = document.createElement('style')
             style.innerText = 'pre.sf-dump .sf-dump-compact, .sf-dump-str-collapse .sf-dump-str-collapse, .sf-dump-str-expand .sf-dump-str-expand { display: none; }'
             document.head.append(style)
+        },
+        flush() {
+            this.$api
+            .post('flush')
+            .then(res => {
+               res.success 
+                ? this.dumps.splice(0)
+                : console.error('Something went wrong flushing')
+            })
+            .catch(error => {console.error(error)})
         },
         removeDump(timestamp) {
             this.$api
