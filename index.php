@@ -59,12 +59,21 @@ Kirby::plugin('sietseveenman/kirby3-toilet', [
         'roles' => ['admin']
     ],
     'areas' => [
-        'toilet' => function() {
+        'toilet' => function($app) {
 
             $userRole = kirby()->user()?->role()->name();
             $allowedRoles = option('sietseveenman.kirby3-toilet.roles');
             
             if ( ! in_array($userRole, $allowedRoles) ) return [];
+
+            // Very clunky way to force load assets
+            PluginAssets::resolve('sietseveenman/kirby3-toilet', 'flush.mp3');
+            PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-1.mp3');
+            PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-2.mp3');
+            PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-3.mp3');
+            PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-4.mp3');
+            PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-5.mp3');
+            PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-6.mp3');
 
             return [
                 'label'   => 'Toilet',
@@ -77,16 +86,6 @@ Kirby::plugin('sietseveenman/kirby3-toilet', [
                             'component' => 'toilet',
                             'title' => 'Toilet',
                             'props' => [
-                                'audio' => function () {
-                                    // PluginAssets::resolve('sietseveenman/kirby3-toilet', 'flush.mp3');
-                                    // PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-1.mp3');
-                                    // PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-2.mp3');
-                                    // PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-3.mp3');
-                                    // PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-4.mp3');
-                                    // PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-5.mp3');
-                                    // PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-6.mp3');
-                                    return '';
-                                },
                                 'headline' => function ($headline = "Number two's") {
                                     return $headline;
                                 },
