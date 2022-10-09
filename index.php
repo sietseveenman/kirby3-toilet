@@ -2,14 +2,13 @@
 
 @include_once __DIR__ . '/vendor/autoload.php';
 
-use Kirby\Data\Data;
 use Kirby\Filesystem\F;
 use kirby\Data\Json;
 use Kirby\Cms\Response;
+use Kirby\Cms\PluginAssets;
 use Symfony\Component\VarDumper\VarDumper;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper;
-use Symfony\Component\VarDumper\Caster\ReflectionCaster;
 
 function poop(
     mixed $var, 
@@ -70,6 +69,16 @@ Kirby::plugin('sietseveenman/kirby3-toilet', [
                         'component' => 'toilet',
                         'title' => 'Toilet',
                         'props' => [
+                            'audio' => function () {
+                                // PluginAssets::resolve('sietseveenman/kirby3-toilet', 'flush.mp3');
+                                // PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-1.mp3');
+                                // PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-2.mp3');
+                                // PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-3.mp3');
+                                // PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-4.mp3');
+                                // PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-5.mp3');
+                                // PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-6.mp3');
+                                return '';
+                            },
                             'headline' => function ($headline = "Number two's") {
                                 return $headline;
                             },

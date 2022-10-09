@@ -142,6 +142,14 @@ export default {
             ready: false,
             sfDump: null,
             triggered: [],
+            farts: [
+                new Audio('/media/plugins/sietseveenman/kirby3-toilet/fart-1.mp3'),
+                new Audio('/media/plugins/sietseveenman/kirby3-toilet/fart-2.mp3'),
+                new Audio('/media/plugins/sietseveenman/kirby3-toilet/fart-3.mp3'),
+                new Audio('/media/plugins/sietseveenman/kirby3-toilet/fart-4.mp3'),
+                new Audio('/media/plugins/sietseveenman/kirby3-toilet/fart-5.mp3'),
+                new Audio('/media/plugins/sietseveenman/kirby3-toilet/fart-6.mp3')
+            ]
         }
     },
 
@@ -163,11 +171,16 @@ export default {
         flush() {
             this.$api.post('flush')
             .then(res => {
-               res.success 
-                    ? this.dumps.splice(0)
-                    : console.error('Something went wrong flushing')
+                if( res.success ) {
+                    let sound = new Audio('/media/plugins/sietseveenman/kirby3-toilet/flush.mp3')
+                    sound?.play()
+                    this.dumps.splice(0)
+                }
+                else {
+                    console.err('Something went wrong flushing')
+                }
             })
-            .catch(error => {console.error(error)})
+            .catch(err => {console.err(err)})
         },
 
         removeDump(timestamp) {
@@ -178,10 +191,10 @@ export default {
                     this.dumps.splice(dumpIndex, 1)
                }
                else {
-                    console.error('Something went wrong removing: ',JSON.parse(this.dumps.dumpIndex))
+                    console.err('Something went wrong removing: ',JSON.parse(this.dumps.dumpIndex))
                }
             })
-            .catch(error => {console.error(error)})
+            .catch(err => {console.err(err)})
         },
         
         receiveDumps() {
@@ -189,12 +202,16 @@ export default {
                 console.log('check')
                 this.$api.get('receive-fresh-dumps', this.firstDump ? { initial:true } : {})
                 .then(res => {
-                    res.dumps?.forEach( dump => this.dumps.push(dump) )
                     this.firstDump = false
+                    if ( res.dumps?.length ) {
+                        res.dumps.forEach( dump => this.dumps.push(dump) )
+                        this.$nextTick(this.triggerDumps)
+                        this.farts[Math.floor(Math.random()*this.farts.length)].play()
+                            .then().catch(err => console.info('Not alowed to play sound yet:', err));
+                    }
                     this.receiveDumps()
-                    this.$nextTick(this.triggerDumps)
                 })
-                .catch(error => { console.error(error) })
+                .catch(err => { console.err(err) })
             }, this.firstDump ? 50 : this.timeout)
         },
  
