@@ -55,41 +55,50 @@ function poop(
 
 Kirby::plugin('sietseveenman/kirby3-toilet', [
     'options' => [
-        'poop-timeout' => 2000
+        'poop-timeout' => 2000,
+        'roles' => ['admin']
     ],
     'areas' => [
-        'toilet' => [
-            'label'   => 'Toilet',
-            'icon'    => 'smile',
-            'menu'    => true,
-            'views'   => [[
-                'pattern' => 'toilet',
-                'action'  => function () {
-                    return [
-                        'component' => 'toilet',
-                        'title' => 'Toilet',
-                        'props' => [
-                            'audio' => function () {
-                                // PluginAssets::resolve('sietseveenman/kirby3-toilet', 'flush.mp3');
-                                // PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-1.mp3');
-                                // PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-2.mp3');
-                                // PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-3.mp3');
-                                // PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-4.mp3');
-                                // PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-5.mp3');
-                                // PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-6.mp3');
-                                return '';
-                            },
-                            'headline' => function ($headline = "Number two's") {
-                                return $headline;
-                            },
-                            'timeout' => function () {
-                                return option('sietseveenman.kirby3-toilet.poop-timeout');
-                            },
-                        ]
-                    ];
-                }
-            ],],
-        ],
+        'toilet' => function() {
+
+            $userRole = kirby()->user()->role()->name();
+            $allowedRoles = option('sietseveenman.kirby3-toilet.roles');
+            
+            if ( ! in_array($userRole, $allowedRoles) ) return [];
+
+            return [
+                'label'   => 'Toilet',
+                'icon'    => 'smile',
+                'menu'    => true,
+                'views'   => [[
+                    'pattern' => 'toilet',
+                    'action'  => function () {
+                        return [
+                            'component' => 'toilet',
+                            'title' => 'Toilet',
+                            'props' => [
+                                'audio' => function () {
+                                    // PluginAssets::resolve('sietseveenman/kirby3-toilet', 'flush.mp3');
+                                    // PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-1.mp3');
+                                    // PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-2.mp3');
+                                    // PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-3.mp3');
+                                    // PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-4.mp3');
+                                    // PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-5.mp3');
+                                    // PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-6.mp3');
+                                    return '';
+                                },
+                                'headline' => function ($headline = "Number two's") {
+                                    return $headline;
+                                },
+                                'timeout' => function () {
+                                    return option('sietseveenman.kirby3-toilet.poop-timeout');
+                                },
+                            ]
+                        ];
+                    }
+                ],],
+            ];
+        }
     ],
     'api' => [
         'routes' => [

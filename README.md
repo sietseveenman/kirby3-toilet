@@ -28,12 +28,18 @@ foreach( poop($articles), $item) {
 -------
 poop($payment)->isSuccessful()->doStuff();
 ```
-Customize the timeout duration for loading fresh dumps in your project's config.php
+
+### Config
 ```php
+// site/config.php
 return [
+    // Customize the timeout duration for loading fresh dumps.
     // Default = 2000
     'sietseveenman.kirby3-toilet.poop-timeout' => 500,
-]
+    // Set permission for user roles to use the toilet.
+    // Default = ['admin']
+    'sietseveenman.kirby3-toilet.roles' => ['developer', 'vegan'],
+];
 ```
 
 ### Additional info
