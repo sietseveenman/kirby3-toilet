@@ -56,6 +56,7 @@ function poop(
 Kirby::plugin('sietseveenman/kirby3-toilet', [
     'options' => [
         'poop-timeout' => 2000,
+        'muted' => false,
         'roles' => ['admin']
     ],
     'areas' => [
@@ -89,6 +90,7 @@ Kirby::plugin('sietseveenman/kirby3-toilet', [
                                 'headline' => function ($headline = "Number two's") {
                                     return $headline;
                                 },
+                                'muted' => function () { return option('sietseveenman.kirby3-toilet.muted'); },
                                 'timeout' => function () {
                                     return option('sietseveenman.kirby3-toilet.poop-timeout');
                                 },

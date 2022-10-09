@@ -126,7 +126,8 @@ export default {
 
     props: {
         headline: String,
-        timeout: Number
+        timeout: Number,
+        muted: Boolean,
     },
 
     computed: {
@@ -142,6 +143,7 @@ export default {
             ready: false,
             sfDump: null,
             triggered: [],
+            flushSound: new Audio('/media/plugins/sietseveenman/kirby3-toilet/flush.mp3'),
             farts: [
                 new Audio('/media/plugins/sietseveenman/kirby3-toilet/fart-1.mp3'),
                 new Audio('/media/plugins/sietseveenman/kirby3-toilet/fart-2.mp3'),
@@ -172,8 +174,7 @@ export default {
             this.$api.post('flush')
             .then(res => {
                 if( res.success ) {
-                    let sound = new Audio('/media/plugins/sietseveenman/kirby3-toilet/flush.mp3')
-                    sound?.play()
+                    if ( ! this.muted ) this.flushSound?.play()
                     this.dumps.splice(0)
                 }
                 else {
@@ -202,12 +203,17 @@ export default {
                 console.log('check')
                 this.$api.get('receive-fresh-dumps', this.firstDump ? { initial:true } : {})
                 .then(res => {
+
                     this.firstDump = false
                     if ( res.dumps?.length ) {
+
                         res.dumps.forEach( dump => this.dumps.push(dump) )
                         this.$nextTick(this.triggerDumps)
-                        this.farts[Math.floor(Math.random()*this.farts.length)].play()
-                            .then().catch(err => console.info('Not alowed to play sound yet:', err));
+
+                        if ( ! this.muted ) {
+                            this.farts[Math.floor(Math.random()*this.farts.length)].play()
+                                .then().catch(err => console.info('Not alowed to play sound yet:', err))
+                        }
                     }
                     this.receiveDumps()
                 })
