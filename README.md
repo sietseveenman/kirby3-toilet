@@ -1,6 +1,10 @@
 # Kirby3 Toilet
 
-Dump without stopping your thread or template rendering. Instead your dumps will go straight to the new Toilet panel area. There you can inspect them and flush when you are done debugging. Don't forget to wash your hands!
+Dump without stopping your thread or template rendering. Instead your dumps will go straight to the new Toilet panel area. There you can inspect them 
+and flush when you are done debugging. Don't forget to wash your hands!
+
+![number-two](https://user-images.githubusercontent.com/19320817/194783072-59ff2c15-87c4-4338-bf2c-6570bbb9e5c8.gif)
+
 
 ![number-two](https://user-images.githubusercontent.com/19320817/194783072-59ff2c15-87c4-4338-bf2c-6570bbb9e5c8.gif)
 
