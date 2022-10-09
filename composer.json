@@ -4,6 +4,12 @@
     "license": "MIT",
     "type": "kirby-plugin",
     "version": "0.9",
+    "authors": [
+        {
+            "name": "Sietse Veenman",
+            "email": "s.veenman@gmail.com"
+        }
+    ],
     "require": {
         "getkirby/composer-installer": "^1.1"
     },
