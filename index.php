@@ -61,7 +61,7 @@ Kirby::plugin('sietseveenman/kirby3-toilet', [
     'areas' => [
         'toilet' => function() {
 
-            $userRole = kirby()->user()->role()->name();
+            $userRole = kirby()->user()?->role()->name();
             $allowedRoles = option('sietseveenman.kirby3-toilet.roles');
             
             if ( ! in_array($userRole, $allowedRoles) ) return [];
