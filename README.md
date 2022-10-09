@@ -25,7 +25,7 @@ poop() returns the passed variable so you can chain methods and keep your code r
 foreach( poop($articles), $item) {
     <a href="<?= $item->url() ?>"><?= $item->title() ?></a>
 }
--------
+// -------
 poop($payment)->isSuccessful()->doStuff();
 ```
 
