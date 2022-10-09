@@ -92,12 +92,12 @@
             <div class="header">
                 <k-headline size="large">Don't forget to wash your hands</k-headline>
                 <button class="flush" @click="flush" v-show="parsedDumps.length > 1">
-                    <k-icon type="refresh" class="icon"/> Flush toilet
+                    <k-icon type="refresh" class="icon"/> Flush
                 </button>
             </div>
             
             <div class="container">
-                <div v-for="(dump, index) in parsedDumps" :key="index" class="dump">
+                <div v-for="(dump, index) in parsedDumps" :key="dump.timestamp" class="dump">
                     <div class="meta">
                         <k-text size="tiny" class="timestamp">
                             <k-icon type="clock" class="icon"/><span>{{ dump.time }}</span>
@@ -108,7 +108,7 @@
                     </div>
                     <div class="print">
                         <k-headline v-if="dump.label" class="label">{{ dump.label }}</k-headline>
-                        <div v-html="dump.fecal_matter" :data-index="index" ref="dumps">
+                        <div v-html="dump.fecal_matter" :data-index="index" ref="dump">
                         </div>
                     </div>
                 </div>
@@ -123,87 +123,94 @@
 import sfdump from '../../lib/sfdump.js'
 
 export default {
+
     props: {
         headline: String,
         timeout: Number
     },
+
     computed: {
-        parsedDumps() {
-            return this.dumps.map( d => JSON.parse(d) ).reverse()
-        }
+        parsedDumps() { return this.dumps.map( d => JSON.parse(d) ).reverse() }
     },
+
     data() {
         return {
+            dumpTimeout: null,
             firstDump: true,
             dumps: [],
             dump: null,
             ready: false,
             sfDump: null,
             triggered: [],
-        };
+        }
     },
-    mounted() {
 
+    mounted() {
         this.sfDump = sfdump(document)
         this.addStyles()
         this.receiveDumps()
     },
+
+    destroyed() { clearTimeout(this.dumpTimeout) },
+
     methods: {
         addStyles() {
             let style = document.createElement('style')
             style.innerText = 'pre.sf-dump .sf-dump-compact, .sf-dump-str-collapse .sf-dump-str-collapse, .sf-dump-str-expand .sf-dump-str-expand { display: none; }'
             document.head.append(style)
         },
+
         flush() {
-            this.$api
-            .post('flush')
+            this.$api.post('flush')
             .then(res => {
                res.success 
-                ? this.dumps.splice(0)
-                : console.error('Something went wrong flushing')
+                    ? this.dumps.splice(0)
+                    : console.error('Something went wrong flushing')
             })
             .catch(error => {console.error(error)})
         },
+
         removeDump(timestamp) {
-            this.$api
-            .post('remove-dump/'+timestamp)
+            this.$api.post('remove-dump/'+timestamp)
             .then(res => {
                if ( res.success ) {
                     const dumpIndex = this.dumps.map(d=>JSON.parse(d).timestamp).indexOf(timestamp)
                     this.dumps.splice(dumpIndex, 1)
                }
                else {
-                console.error('Something went wrong removing: ',JSON.parse(this.dumps.dumpIndex))
+                    console.error('Something went wrong removing: ',JSON.parse(this.dumps.dumpIndex))
                }
             })
             .catch(error => {console.error(error)})
         },
         
         receiveDumps() {
-            this.$api
-            .get('receive-fresh-dumps', this.firstDump ? {initial:true} : {})
-            .then(res => {
-                res.dumps?.forEach(dump=>this.dumps.push(dump))
-                this.triggerDumps()
-            })
-            .catch(error => { console.error(error) })
-            setTimeout(() => {
-                this.firstDump = false
-                this.receiveDumps()
-            }, this.timeout)
+            this.dumpTimeout = setTimeout(() => {
+                this.$api.get('receive-fresh-dumps', this.firstDump ? { initial:true } : {})
+                .then(res => {
+                    res.dumps?.forEach( dump => this.dumps.push(dump) )
+                    this.firstDump = false
+                    this.receiveDumps()
+                    this.$nextTick(this.triggerDumps)
+                })
+                .catch(error => { console.error(error) })
+            }, this.firstDump ? 50 : this.timeout)
         },
  
         triggerDumps() {
-            const divs = this.$refs.dumps;
-            if (! divs) return;
-            divs.forEach(el => {
-                const id = el.querySelector('.sf-dump[id]').id;
-                if (this.triggered.includes(id)) return;
-                this.sfDump(id);
-                this.triggered.push(id);
-            });
-        },
+            const dumpDivs = this.$refs.dump
+            if (! dumpDivs) return
 
+            dumpDivs.forEach(el => {
+                const dumpEl = el.querySelector('.sf-dump[id]')
+                const id = dumpEl.id
+
+                if ( this.triggered.includes(id) ) return
+                
+                this.sfDump(id)
+                this.triggered.push(id)
+            })
+        },
     }
 }
 </script>

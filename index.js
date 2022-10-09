@@ -494,6 +494,7 @@
     },
     data() {
       return {
+        dumpTimeout: null,
         firstDump: true,
         dumps: [],
         dump: null,
@@ -506,6 +507,9 @@
       this.sfDump = sfdump(document);
       this.addStyles();
       this.receiveDumps();
+    },
+    destroyed() {
+      clearTimeout(this.dumpTimeout);
     },
     methods: {
       addStyles() {
@@ -533,24 +537,25 @@
         });
       },
       receiveDumps() {
-        this.$api.get("receive-fresh-dumps", this.firstDump ? { initial: true } : {}).then((res) => {
-          var _a;
-          (_a = res.dumps) == null ? void 0 : _a.forEach((dump) => this.dumps.push(dump));
-          this.triggerDumps();
-        }).catch((error) => {
-          console.error(error);
-        });
-        setTimeout(() => {
-          this.firstDump = false;
-          this.receiveDumps();
-        }, this.timeout);
+        this.dumpTimeout = setTimeout(() => {
+          this.$api.get("receive-fresh-dumps", this.firstDump ? { initial: true } : {}).then((res) => {
+            var _a;
+            (_a = res.dumps) == null ? void 0 : _a.forEach((dump) => this.dumps.push(dump));
+            this.firstDump = false;
+            this.receiveDumps();
+            this.$nextTick(this.triggerDumps);
+          }).catch((error) => {
+            console.error(error);
+          });
+        }, this.firstDump ? 50 : this.timeout);
       },
       triggerDumps() {
-        const divs = this.$refs.dumps;
-        if (!divs)
+        const dumpDivs = this.$refs.dump;
+        if (!dumpDivs)
           return;
-        divs.forEach((el) => {
-          const id = el.querySelector(".sf-dump[id]").id;
+        dumpDivs.forEach((el) => {
+          const dumpEl = el.querySelector(".sf-dump[id]");
+          const id = dumpEl.id;
           if (this.triggered.includes(id))
             return;
           this.sfDump(id);
@@ -561,10 +566,10 @@
   };
   var _sfc_render = function render() {
     var _vm = this, _c = _vm._self._c;
-    return _c("k-inside", [_c("k-view", { staticClass: "k-toilet-view" }, [_c("div", { staticClass: "header" }, [_c("k-headline", { attrs: { "size": "large" } }, [_vm._v("Don't forget to wash your hands")]), _c("button", { directives: [{ name: "show", rawName: "v-show", value: _vm.parsedDumps.length > 1, expression: "parsedDumps.length > 1" }], staticClass: "flush", on: { "click": _vm.flush } }, [_c("k-icon", { staticClass: "icon", attrs: { "type": "refresh" } }), _vm._v(" Flush toilet ")], 1)], 1), _c("div", { staticClass: "container" }, _vm._l(_vm.parsedDumps, function(dump, index) {
-      return _c("div", { key: index, staticClass: "dump" }, [_c("div", { staticClass: "meta" }, [_c("k-text", { staticClass: "timestamp", attrs: { "size": "tiny" } }, [_c("k-icon", { staticClass: "icon", attrs: { "type": "clock" } }), _c("span", [_vm._v(_vm._s(dump.time))])], 1), _c("button", { staticClass: "remove", on: { "click": function($event) {
+    return _c("k-inside", [_c("k-view", { staticClass: "k-toilet-view" }, [_c("div", { staticClass: "header" }, [_c("k-headline", { attrs: { "size": "large" } }, [_vm._v("Don't forget to wash your hands")]), _c("button", { directives: [{ name: "show", rawName: "v-show", value: _vm.parsedDumps.length > 1, expression: "parsedDumps.length > 1" }], staticClass: "flush", on: { "click": _vm.flush } }, [_c("k-icon", { staticClass: "icon", attrs: { "type": "refresh" } }), _vm._v(" Flush ")], 1)], 1), _c("div", { staticClass: "container" }, _vm._l(_vm.parsedDumps, function(dump, index) {
+      return _c("div", { key: dump.timestamp, staticClass: "dump" }, [_c("div", { staticClass: "meta" }, [_c("k-text", { staticClass: "timestamp", attrs: { "size": "tiny" } }, [_c("k-icon", { staticClass: "icon", attrs: { "type": "clock" } }), _c("span", [_vm._v(_vm._s(dump.time))])], 1), _c("button", { staticClass: "remove", on: { "click": function($event) {
         return _vm.removeDump(dump.timestamp);
-      } } }, [_c("k-icon", { attrs: { "type": "remove" } })], 1)], 1), _c("div", { staticClass: "print" }, [dump.label ? _c("k-headline", { staticClass: "label" }, [_vm._v(_vm._s(dump.label))]) : _vm._e(), _c("div", { ref: "dumps", refInFor: true, attrs: { "data-index": index }, domProps: { "innerHTML": _vm._s(dump.fecal_matter) } })], 1)]);
+      } } }, [_c("k-icon", { attrs: { "type": "remove" } })], 1)], 1), _c("div", { staticClass: "print" }, [dump.label ? _c("k-headline", { staticClass: "label" }, [_vm._v(_vm._s(dump.label))]) : _vm._e(), _c("div", { ref: "dump", refInFor: true, attrs: { "data-index": index }, domProps: { "innerHTML": _vm._s(dump.fecal_matter) } })], 1)]);
     }), 0)])], 1);
   };
   var _sfc_staticRenderFns = [];
