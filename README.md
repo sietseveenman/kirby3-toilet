@@ -25,7 +25,7 @@ poop() returns the passed variable so you can chain methods and keep your code r
 foreach( poop($articles), $item) {
     <a href="<?= $item->url() ?>"><?= $item->title() ?></a>
 }
-// -------
+
 poop($payment)->isSuccessful()->doStuff();
 ```
 
@@ -33,12 +33,17 @@ poop($payment)->isSuccessful()->doStuff();
 ```php
 // site/config.php
 return [
-    // Customize the timeout duration for loading fresh dumps.
-    // Default = 2000
-    'sietseveenman.kirby3-toilet.poop-timeout' => 500,
-    // Set permission for user roles to use the toilet.
-    // Default = ['admin']
-    'sietseveenman.kirby3-toilet.roles' => ['developer', 'vegan'],
+    'sietseveenman.kirby3-toilet' => [
+        // Customize the timeout duration for loading fresh dumps.
+        // Default = 2000
+        'poop-timeout' => 500,
+        // Dump in silence if you want to.
+        // Defailt = false
+        'muted' => true,
+        // Set permission for user roles to use the toilet.
+        // Default = ['admin']
+        'roles' => ['developer', 'vegan'],
+    ],
 ];
 ```
 
