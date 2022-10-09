@@ -3,14 +3,14 @@
         --borderColor: rgba(0,0,0,0.12);
     }
     .k-toilet-view {
-        padding: 50px 60px;
+        padding: 20px 60px;
     }
     .container {
-        margin: 20px 0;
         width: 100%;
         max-width: 820px;
     }
     .header {
+        margin: 20px 0;
         display: flex;
         justify-content: space-between;
         align-items: baseline;
@@ -88,15 +88,15 @@
 <template>
     <k-inside>
         <k-view class="k-toilet-view">
-            
-            <div class="header">
-                <k-headline size="large">Don't forget to wash your hands</k-headline>
-                <button class="flush" @click="flush" v-show="parsedDumps.length > 1">
-                    <k-icon type="refresh" class="icon"/> Flush
-                </button>
-            </div>
-            
             <div class="container">
+
+                <div class="header">
+                    <k-headline size="large">Don't forget to wash your hands</k-headline>
+                    <button class="flush" @click="flush" v-show="parsedDumps.length > 1">
+                        <k-icon type="refresh" class="icon"/> Flush
+                    </button>
+                </div>
+                
                 <div v-for="(dump, index) in parsedDumps" :key="dump.timestamp" class="dump">
                     <div class="meta">
                         <k-text size="tiny" class="timestamp">
@@ -112,8 +112,8 @@
                         </div>
                     </div>
                 </div>
+
             </div>
-           
         </k-view>
     </k-inside>
 </template>

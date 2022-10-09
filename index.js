@@ -567,11 +567,11 @@
   };
   var _sfc_render = function render() {
     var _vm = this, _c = _vm._self._c;
-    return _c("k-inside", [_c("k-view", { staticClass: "k-toilet-view" }, [_c("div", { staticClass: "header" }, [_c("k-headline", { attrs: { "size": "large" } }, [_vm._v("Don't forget to wash your hands")]), _c("button", { directives: [{ name: "show", rawName: "v-show", value: _vm.parsedDumps.length > 1, expression: "parsedDumps.length > 1" }], staticClass: "flush", on: { "click": _vm.flush } }, [_c("k-icon", { staticClass: "icon", attrs: { "type": "refresh" } }), _vm._v(" Flush ")], 1)], 1), _c("div", { staticClass: "container" }, _vm._l(_vm.parsedDumps, function(dump, index) {
+    return _c("k-inside", [_c("k-view", { staticClass: "k-toilet-view" }, [_c("div", { staticClass: "container" }, [_c("div", { staticClass: "header" }, [_c("k-headline", { attrs: { "size": "large" } }, [_vm._v("Don't forget to wash your hands")]), _c("button", { directives: [{ name: "show", rawName: "v-show", value: _vm.parsedDumps.length > 1, expression: "parsedDumps.length > 1" }], staticClass: "flush", on: { "click": _vm.flush } }, [_c("k-icon", { staticClass: "icon", attrs: { "type": "refresh" } }), _vm._v(" Flush ")], 1)], 1), _vm._l(_vm.parsedDumps, function(dump, index) {
       return _c("div", { key: dump.timestamp, staticClass: "dump" }, [_c("div", { staticClass: "meta" }, [_c("k-text", { staticClass: "timestamp", attrs: { "size": "tiny" } }, [_c("k-icon", { staticClass: "icon", attrs: { "type": "clock" } }), _c("span", [_vm._v(_vm._s(dump.time))])], 1), _c("button", { staticClass: "remove", on: { "click": function($event) {
         return _vm.removeDump(dump.timestamp);
       } } }, [_c("k-icon", { attrs: { "type": "remove" } })], 1)], 1), _c("div", { staticClass: "print" }, [dump.label ? _c("k-headline", { staticClass: "label" }, [_vm._v(_vm._s(dump.label))]) : _vm._e(), _c("div", { ref: "dump", refInFor: true, attrs: { "data-index": index }, domProps: { "innerHTML": _vm._s(dump.fecal_matter) } })], 1)]);
-    }), 0)])], 1);
+    })], 2)])], 1);
   };
   var _sfc_staticRenderFns = [];
   _sfc_render._withStripped = true;

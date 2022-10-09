@@ -2,14 +2,14 @@
   --borderColor: rgba(0,0,0,0.12);
 }
 .k-toilet-view {
-  padding: 50px 60px;
+  padding: 20px 60px;
 }
 .container {
-  margin: 20px 0;
   width: 100%;
   max-width: 820px;
 }
 .header {
+  margin: 20px 0;
   display: flex;
   justify-content: space-between;
   align-items: baseline;
