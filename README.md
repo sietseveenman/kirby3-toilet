@@ -4,7 +4,10 @@ Dump without stopping your thread or template rendering. Instead your dumps will
 
 ![number-two](https://user-images.githubusercontent.com/19320817/194783072-59ff2c15-87c4-4338-bf2c-6570bbb9e5c8.gif)
 
+### Notes
+This project was inspired by <a href="https://spatie.be/products/ray">Spatie's Ray</a> and <a href="https://laravel.com/docs/9.x/telescope">Laravel's Telescope</a>. It borrows some of Telescope's code to trigger the interactive bits of the dumps on the panel area.
 
+<span style="color: red">!! Warning </span>This project was created in a couple of days, It hasn't been tested much. Use at your own risk!
 ## Installation
 
 With Composer
@@ -47,6 +50,3 @@ return [
     ],
 ];
 ```
-
-### Additional info
-...
