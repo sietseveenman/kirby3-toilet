@@ -25,7 +25,7 @@ function poop(
 
     $toilet = kirby()->root('site').'/toilet';
 
-    $dumpFile = $toilet .'/fresh-dump-x'.$timestamp.'x.txt';
+    $dumpFile = $toilet .'/fresh-dump-'.uuid().'-x'.$timestamp.'x.txt';
     
     $dumper = new HtmlDumper();
     $dumper->setTheme('light');
