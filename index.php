@@ -3,7 +3,7 @@
 @include_once __DIR__ . '/vendor/autoload.php';
 
 use Kirby\Filesystem\F;
-use kirby\Data\Json;
+use Kirby\Data\Json;
 use Kirby\Cms\Response;
 use Kirby\Cms\PluginAssets;
 use Symfony\Component\VarDumper\VarDumper;
@@ -25,7 +25,7 @@ function poop(
 
     $toilet = kirby()->root('site').'/toilet';
 
-    $dumpFile = $toilet .'/fresh-dump-x'.$timestamp.'x.txt';
+    $dumpFile = $toilet .'/fresh-dump-'.uuid().'-x'.$timestamp.'x.txt';
     
     $dumper = new HtmlDumper();
     $dumper->setTheme('light');
