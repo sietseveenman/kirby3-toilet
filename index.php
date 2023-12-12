@@ -68,13 +68,13 @@ Kirby::plugin('sietseveenman/kirby3-toilet', [
             if ( ! in_array($userRole, $allowedRoles) ) return [];
 
             // Very clunky way to force load assets
-            PluginAssets::resolve('sietseveenman/kirby3-toilet', 'flush.mp3');
-            PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-1.mp3');
-            PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-2.mp3');
-            PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-3.mp3');
-            PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-4.mp3');
-            PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-5.mp3');
-            PluginAssets::resolve('sietseveenman/kirby3-toilet', 'fart-6.mp3');
+            PluginAssets::resolve('sietseveenman/kirby3-toilet', '1151171973-1666207602', 'flush.mp3');
+            PluginAssets::resolve('sietseveenman/kirby3-toilet', '893908019-1666207602', 'fart-1.mp3');
+            PluginAssets::resolve('sietseveenman/kirby3-toilet', '1927778019-1666207602', 'fart-2.mp3');
+            PluginAssets::resolve('sietseveenman/kirby3-toilet', '1334290259-1666207602', 'fart-3.mp3');
+            PluginAssets::resolve('sietseveenman/kirby3-toilet', '4255611715-1666207602', 'fart-4.mp3');
+            PluginAssets::resolve('sietseveenman/kirby3-toilet', '3234288371-1666207602 ', 'fart-5.mp3');
+            PluginAssets::resolve('sietseveenman/kirby3-toilet', '2271684643-1666207602', 'fart-6.mp3');
 
             return [
                 'label'   => 'Toilet',
